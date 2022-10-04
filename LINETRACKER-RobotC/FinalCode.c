@@ -6,11 +6,25 @@
 
 
 const int topSpeed = 15;
+const int rotateSpeedFast = 30;
+const int rotateSpeedSlow = 30;
 
 void greenAction(float &dist, int &greenBeeped);
 void blueAction(float &dist, int &r, int &blueBeeped);
 void chooseAction(int &lastColor, int &r, float &dist, int &beep);
+void displayRGB(long redValue, long greenValue, long blueValue);
+void beepStopHelper(long beepFreq, int beepLength);
 
+// EFFECTS: displays RGB value on Robot Screen
+void displayRGB(long redValue, long greenValue, long blueValue) {
+	// DEBUG Display
+	eraseDisplay();
+	displayStringAt(0,15, "red: %d", redValue);
+	displayStringAt(0,30, "blue: %d", blueValue);
+	displayStringAt(0,45, "green: %d", greenValue);
+}
+
+// EFFECTS: Function abstraction, helps functions keep track of the last seen color
 // lastColor == 0 is blue || lastColor == 1 is green
 void chooseAction(int &lastColor, int &r, float &dist, int &beep) {
 	if (lastColor == 0) {
@@ -20,7 +34,16 @@ void chooseAction(int &lastColor, int &r, float &dist, int &beep) {
 	}
 }
 
-// assumes distance is already less than 10cm
+// EFFECTS: Given desired beep frequency and beep length in x ms, stops the robot and beeps
+//				for x amount of time
+void beepStopHelper(long beepFreq, int beepLength) {
+	int beepToneTime = beepLength / 10;
+	
+	playTone(200, beepToneTime);
+	sleep(beepLength);
+}
+
+// EFFECTS: Static action done when robot sees object and currently tracking green line
 void greenAction(float &dist, int &greenBeeped) {
 	// push the object out of the way
 
@@ -28,12 +51,11 @@ void greenAction(float &dist, int &greenBeeped) {
 		//beep
 		setMotorSpeed(lWheel, 0);
 		setMotorSpeed(rWheel, 0);
-		playTone(200,200);
-
-		sleep(2000);
-
+		
+		beepStopHelper(200, 2000);
 		greenBeeped = 1;
 
+		// Static action
 		// move it forward
 		motor[lWheel] = 30;
 		motor[rWheel] = 30;
@@ -61,7 +83,7 @@ void greenAction(float &dist, int &greenBeeped) {
 	}
 }
 
-
+// EFFECTS: Static action done when robot sees object and currently tracking blue line
 void blueAction(float &dist, int &r, int &blueBeeped) {
 	// turn around and go back to the beginning
 	if (dist <= 10 && blueBeeped == 0) {
@@ -69,17 +91,15 @@ void blueAction(float &dist, int &r, int &blueBeeped) {
 		//beep
 		setMotorSpeed(lWheel, 0);
 		setMotorSpeed(rWheel, 0);
-		playTone(200,200);
 
-		sleep(2000);
-
+		beepStopHelper(200, 2000);
 		blueBeeped = 1;
 
-				// move backwards
+		//Static Action
+		// move backwards
 		motor[lWheel] = -30;
 		motor[rWheel] = -30;
 		sleep(300);
-
 
 		motor[lWheel] = -30;
 		motor[rWheel] = 30;
@@ -107,12 +127,10 @@ task main()
 		//lower than the calculated threshold of 50):
 
 		getColorRGB(ColorSensor, redValue, greenValue, blueValue);
-		eraseDisplay();
-		displayStringAt(0,15, "red: %d", redValue);
-		displayStringAt(0,30, "blue: %d", blueValue);
-		displayStringAt(0,45, "green: %d", greenValue);
 
 		long intens = (redValue + blueValue + greenValue) / 3;
+
+		displayRGB(redValue, greenValue, blueValue);
 
 		distance = getUSDistance(USonicSensor);
 
@@ -172,12 +190,10 @@ task main()
 				setMotorSpeed(rWheel, topSpeed);
 			}
 			lastColor = 0;
-			} else if (intens < 20) {
+			} else {
 			setMotorSpeed(lWheel, topSpeed);
 			setMotorSpeed(rWheel, 0);
-			} else {
-
-		}
+			}
 	}
 }
 
