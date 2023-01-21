@@ -5,12 +5,12 @@ GIF Example Demonstrations Coming...
 <img src="https://github.com/jsqvl/EV3-Robot/blob/master/Demo-Media/Linetracker-demo-compressed.gif?raw=true" width="811" height="360" />
 
 Tracks colored lines on white backdrops (Based on color reflectivity/brightness).
-
 C or Python code available
 The python version takes longer to initialize and is generally less accurate due to  slower color polling speed
 
 ## Barcode Scanning Mode (C/Matlab)
 ![Barcode Scanner Demo Gif](https://github.com/jsqvl/EV3-Robot/blob/master/Demo-Media/Maze-solver-demo.gif?raw=true)
+
 When compiled, place the barcode scanning robot at either end of the barcode. The robot will collect the data automatically by running forward over it and store it. Returning to your computer, the collected data is run against a barcode dictionary where it will identify the scanned code.
 
 ## Maze-solving Mode (C)
