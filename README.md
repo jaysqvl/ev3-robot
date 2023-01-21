@@ -2,7 +2,7 @@
 GIF Example Demonstrations Coming...
 
 ## Linetrack Mode (Python or C)
-<img src="https://github.com/jsqvl/EV3-Robot/blob/master/Demo-Media/Linetracker-demo-compressed.gif?raw=true" width="811" height="360" />
+![Line Tracker Demo Gif](https://github.com/jsqvl/EV3-Robot/blob/master/Demo-Media/Linetracker-demo-compressed.gif?raw=true)
 
 Tracks colored lines on white backdrops (Based on color reflectivity/brightness).
 C or Python code available
